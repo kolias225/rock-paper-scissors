@@ -6,58 +6,86 @@
     <title>rock-paper-scissors</title>
 </head>
 <body>
-    <h1>Open a console!</h1>
+    <h1>Rock-Paper-Scissors</h1>
+
+    <button id="rock">Rock</button>
+    <button id="paper">Paper</button>
+    <button id="scissors">Scissors</button>
+
+    <div id="result"></div>
+
+    <button id="restart" style="display: none;">Play again</button>
+
+
 
     <script>
       let humanScore = 0;
       let computerScore = 0;
 
+      const resultDiv = document.getElementById('result');
+
+
+
       function  getComputerChoice() {
         const randomNum = 3 * Math.random();
         if (randomNum < 1) {
-            return 'Rock';
+            return 'rock';
         }else if (randomNum < 2) {
-            return 'Paper';
+            return 'paper';
         }else {
-            return 'Scissors';
+            return 'scissors';
         }
       }
       //console.log(getComputerChoice())
-     function getHumanChoice() {
-        const input = prompt('Please make your choise: Rock, Paper, Scissors');
-        if (!input) return 'Invalid';
-        return input.toLowerCase();
-        }
+     function playRound(humanChoice) {
+        const computerChoice = getComputerChoice()
 
-     
 
-     function playRound(humanChoice, computerChoice) {
-        const human = humanChoice.toLowerCase();
-        const computer = computerChoice.toLowerCase();
-
-        if (human === computer) {
-            console.log('Tie!');
+        if (humanChoice === computerChoice) {
+            resultDiv.textContent = `Tie! \nyou both choise: ${humanChoice}.`;
         } else if (
-            (human === 'rock' && computer === 'scissors') ||
-            (human === 'paper' && computer === 'rock') ||
-            (human === 'scissors' && computer === 'paper')
+            (humanChoice === 'rock' && computerChoice === 'scissors') ||
+            (humanChoice === 'paper' && computerChoice === 'rock') ||
+            (humanChoice === 'scissors' && computerChoice === 'paper')
     ) {
         humanScore++;
-        console.log(`You won! ${human} won a ${computer}.`);
-    } else if (
-        (computer === 'rock' && human === 'scissors') ||
-        (computer === 'paper' && human === 'rock') ||
-        (computer === 'scissors' && computer === 'paper')
-    ) {
-        computerScore++;
-        console.log(`You lost! ${computer} won a ${human}.`)
+        resultDiv.textContent = `You won! \n${humanChoice} won a ${computerChoice}.`;
     } else {
-        console.log('Wrong input');
-    }
-    console.log(`Score: human - ${humanScore}, computer - ${computerScore}`)
-        }
+        computerScore++;
+        resultDiv.textContent = `You lost! \n${computerChoice} won a ${humanChoice}.`;
+    } 
+    resultDiv.textContent += `\nScore: You - ${humanScore}, computer - ${computerScore}`;
+        
 
-        function game() {
+        if (humanScore === 5 || computerScore === 5){
+
+            const winner = humanScore === 5 ? `You won a game!` : `Computer won!`;
+            resultDiv.textContent += `\n${winner}`;
+
+            document.getElementById('rock').disabled = true;
+            document.getElementById('paper').disabled = true;
+            document.getElementById('scissors').disabled = true;
+            document.getElementById('restart').style.display = 'inline';
+        }
+    }
+
+    document.getElementById('rock').addEventListener('click', () => playRound('rock'));
+    document.getElementById('paper').addEventListener('click', () => playRound('paper'));
+    document.getElementById('scissors').addEventListener('click', () => playRound('scissors'));
+    document.getElementById('restart').addEventListener('click', () => {
+        humanScore = 0;
+        computerScore = 0;
+        resultDiv.textContent = '';
+
+
+        document.getElementById('rock').disabled = false
+        document.getElementById('paper').disabled = false
+        document.getElementById('scissors').disabled = false
+
+        document.getElementById('restart').style.display = 'none';
+    });
+
+       /* function game() {
             for (let i = 1; i <= 5; i++) {
                 console.log(`Round ${i}`);
                 const humanChoice = getHumanChoice();
@@ -74,7 +102,7 @@
             }
         }
 
-       game()
+       game() */
 
 
      
@@ -90,5 +118,11 @@
         }else if (getComputerChoice === rock && getHumanChoice === paper)
      }*/
     </script>
+    <style>
+        #result {
+          white-space: pre-line;
+        }
+
+      </style>
 </body>
 </html>
